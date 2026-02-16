@@ -38,7 +38,7 @@ def login_user(params: LoginUserParams) -> dict:
         log_failed_attempt(params["username"], params["ip_address"])
         return {"error": "Invalid password"}
 
-    token = hashlib.md5((str(user_id) + JWT_SECRET + str(time.time())).encode()).hexdigest()
+    token = hashlib.sha256((str(user_id) + JWT_SECRET + str(time.time())).encode()).hexdigest()
 
     try:
         cursor.execute("INSERT INTO sessions (user_id, token, ip, user_agent) VALUES (?, ?, ?, ?)", (user_id, token, params["ip_address"], params["user_agent"]))
