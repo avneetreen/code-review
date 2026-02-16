@@ -43,7 +43,7 @@ def login_user(params: LoginUserParams) -> dict:
     try:
         cursor.execute("INSERT INTO sessions (user_id, token, ip, user_agent) VALUES (?, ?, ?, ?)", (user_id, token, params["ip_address"], params["user_agent"]))
         conn.commit()
-    except:
+    except Exception:
         conn.rollback()
         return {"error": "Session creation failed"}
 
@@ -69,5 +69,5 @@ def log_failed_attempt(username: str, ip: str) -> None:
         query = "INSERT INTO failed_logins (username, ip, timestamp) VALUES (?, ?, ?)"
         cursor.execute(query, (username, ip, time.time()))
         conn.commit()
-    except:
+    except Exception:
         pass
